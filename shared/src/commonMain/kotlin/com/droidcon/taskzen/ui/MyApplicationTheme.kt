@@ -1,4 +1,4 @@
-package com.droidcon.taskzen.android
+package com.droidcon.taskzen.ui
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,8 +15,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.droidcon.taskzen.ui.primary
+import com.droidcon.taskzen.ui.primaryLight
 import com.droidcon.taskzen.ui.secondary
+import com.droidcon.taskzen.ui.secondaryLight
 import com.droidcon.taskzen.ui.tertiary
+import com.droidcon.taskzen.ui.tertiaryLight
 
 @Composable
 fun MyApplicationTheme(
@@ -31,9 +34,9 @@ fun MyApplicationTheme(
         )
     } else {
         lightColorScheme(
-            primary = primary,
-            secondary = secondary,
-            tertiary = tertiary
+            primary = primaryLight,
+            secondary = secondaryLight,
+            tertiary = tertiaryLight
         )
     }
     val typography = Typography(
