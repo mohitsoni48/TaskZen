@@ -55,6 +55,7 @@ kotlin {
             implementation(libs.navigation.compose)
 
             api(libs.kotlinx.datetime)
+            implementation(libs.datetime.wheel.picker)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

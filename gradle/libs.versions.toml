@@ -1,5 +1,6 @@
 [versions]
 agp = "8.9.1"
+datetimeWheelPicker = "1.1.0-alpha01-compose1.7"
 kotlin = "2.1.20"
 compose = "1.8.0"
 compose-plugin = "1.7.3"
@@ -13,6 +14,7 @@ koin-bom = "4.0.3"
 kotlinx-dateTime = "0.6.0"
 
 [libraries]
+datetime-wheel-picker = { module = "io.github.darkokoa:datetime-wheel-picker", version.ref = "datetimeWheelPicker" }
 koin-compose = { module = "io.insert-koin:koin-compose" }
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel" }
 koin-compose-viewmodel-navigation = { module = "io.insert-koin:koin-compose-viewmodel-navigation" }
