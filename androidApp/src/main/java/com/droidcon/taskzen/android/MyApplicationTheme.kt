@@ -14,6 +14,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.droidcon.taskzen.ui.primary
+import com.droidcon.taskzen.ui.secondary
+import com.droidcon.taskzen.ui.tertiary
 
 @Composable
 fun MyApplicationTheme(
@@ -22,15 +25,15 @@ fun MyApplicationTheme(
 ) {
     val colors = if (darkTheme) {
         darkColorScheme(
-            primary = Color(0xFFBB86FC),
-            secondary = Color(0xFF03DAC5),
-            tertiary = Color(0xFF3700B3)
+            primary = primary,
+            secondary = secondary,
+            tertiary = tertiary
         )
     } else {
         lightColorScheme(
-            primary = Color(0xFF6200EE),
-            secondary = Color(0xFF03DAC5),
-            tertiary = Color(0xFF3700B3)
+            primary = primary,
+            secondary = secondary,
+            tertiary = tertiary
         )
     }
     val typography = Typography(

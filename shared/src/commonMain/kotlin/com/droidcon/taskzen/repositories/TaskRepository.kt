@@ -12,6 +12,8 @@ interface TaskRepository {
     suspend fun insertTask(task: Task)
     suspend fun updateTask(task: Task)
     suspend fun deleteTask(id: Long)
+    suspend fun markTaskAsCompleted(id: Long)
+    suspend fun markTaskAsIncomplete(id: Long)
 }
 
 @OptIn(ExperimentalTime::class)
@@ -31,7 +33,18 @@ class TaskRepositoryImpl(
     }
 
     override suspend fun deleteTask(id: Long) {
-        taskDao.deleteTask(id)
+        val task = taskDao.getTaskById(id)!!
+        taskDao.updateTask(task.copy(isDeleted = true))
+    }
+
+    override suspend fun markTaskAsCompleted(id: Long) {
+        val task = taskDao.getTaskById(id)!!
+        taskDao.updateTask(task.copy(isCompleted = true))
+    }
+
+    override suspend fun markTaskAsIncomplete(id: Long) {
+        val task = taskDao.getTaskById(id)!!
+        taskDao.updateTask(task.copy(isCompleted = false))
     }
 }
 

@@ -1,9 +1,5 @@
 package com.droidcon.taskzen.models
 
-import kotlin.time.Clock.System
-import kotlin.time.ExperimentalTime
-
-@ExperimentalTime
 data class Task(
     val id: Long,
     val title: String,

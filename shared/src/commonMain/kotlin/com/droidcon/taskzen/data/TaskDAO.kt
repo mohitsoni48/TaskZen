@@ -10,7 +10,7 @@ interface TaskDAO {
     @Insert
     suspend fun insertTask(task: TaskEntity)
 
-    @Query("SELECT * FROM TaskEntity WHERE isDeleted = 0")
+    @Query("SELECT * FROM TaskEntity WHERE isDeleted = false")
     suspend fun getAllTasks(): List<TaskEntity>
 
     @Update
@@ -18,4 +18,7 @@ interface TaskDAO {
 
     @Query("DELETE FROM TaskEntity WHERE id = :id")
     suspend fun deleteTask(id: Long)
+
+    @Query("SELECT * FROM TaskEntity WHERE id = :id")
+    suspend fun getTaskById(id: Long): TaskEntity?
 }
