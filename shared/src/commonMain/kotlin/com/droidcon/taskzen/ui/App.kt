@@ -17,7 +17,7 @@ fun App(modifier: Modifier) {
 
     MyApplicationTheme {
         Surface(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().safeContentPadding(),
             color = MaterialTheme.colorScheme.tertiary
         ) {
             val navController = rememberNavController()

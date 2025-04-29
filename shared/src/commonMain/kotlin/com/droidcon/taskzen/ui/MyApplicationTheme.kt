@@ -30,13 +30,15 @@ fun MyApplicationTheme(
         darkColorScheme(
             primary = primary,
             secondary = secondary,
-            tertiary = tertiary
+            tertiary = tertiary,
+            outline = outline
         )
     } else {
         lightColorScheme(
             primary = primaryLight,
             secondary = secondaryLight,
-            tertiary = tertiaryLight
+            tertiary = tertiaryLight,
+            outline = outlineLight
         )
     }
     val typography = Typography(

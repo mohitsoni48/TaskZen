@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun AddEditTaskContentPreview() {
     AddEditTaskContent(
-        task = Task(1, "Task 1", "Description 1", TaskCategory.PERSONAL, null, false, 1),
+        task = Task(1, "Task 1", "", TaskCategory.PERSONAL, null, false, 1),
         onBackClick = {},
         onSaveClick = {}
     )
