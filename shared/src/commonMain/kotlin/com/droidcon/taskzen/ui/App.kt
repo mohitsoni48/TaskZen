@@ -8,8 +8,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
 
 @Composable
@@ -31,16 +33,25 @@ fun App(modifier: Modifier) {
                         .padding(0.dp)
                 ) {
                     composable("home") {
-                        Home()
+                        Home() {
+                            navController.navigate("add_task")
+                        }
                     }
 
-                    composable("add_task") {
-                        AddEditTaskScreen(null)
+                    dialog(
+                        "add_task",
+                        dialogProperties = DialogProperties(
+                            usePlatformDefaultWidth = false,
+                            dismissOnBackPress = true,
+                            dismissOnClickOutside = true
+                        )
+                    ) {
+                        AddEditTaskScreen(null, onBackClick = { navController.popBackStack() }, onSaveClick = {})
                     }
 
                     composable("edit_task") {
-                        val taskId = it.arguments?.getString("taskId")!!
-                        AddEditTaskScreen(taskId)
+                        val taskId = it.arguments?.getString("taskId")?.toLongOrNull()!!
+                        AddEditTaskScreen(taskId, onBackClick = { navController.popBackStack() }, onSaveClick = {})
                     }
                 }
             }

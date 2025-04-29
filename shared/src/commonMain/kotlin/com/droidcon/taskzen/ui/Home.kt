@@ -23,7 +23,9 @@ import com.droidcon.taskzen.models.Task
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun Home() {
+fun Home(
+    onAddTaskClick: () -> Unit,
+) {
     Box(modifier = Modifier.fillMaxSize()) {
         HomePageContent(Modifier, listOf())
         AddTaskButton(
@@ -32,7 +34,7 @@ fun Home() {
                 .padding(26.dp)
                 .padding(bottom = 34.dp)
                 .clickable {
-                    println("Add clicked")
+                    onAddTaskClick()
                 }
         )
     }

@@ -15,6 +15,7 @@ import com.droidcon.taskzen.models.Task
 import com.droidcon.taskzen.models.TaskCategory
 import com.droidcon.taskzen.ui.AddEditTaskContent
 import com.droidcon.taskzen.ui.App
+import com.droidcon.taskzen.ui.CategoryPicker
 import com.droidcon.taskzen.ui.MyApplicationTheme
 import org.koin.core.context.GlobalContext.startKoin
 
@@ -31,8 +32,14 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun AddEditTaskContentPreview() {
     AddEditTaskContent(
-        task = Task(1, "Task 1", "", TaskCategory.PERSONAL, null, false, 1),
+        task = Task(1, "Task 1", "", TaskCategory.GROCERY, null, false, 1),
         onBackClick = {},
         onSaveClick = {}
     )
+}
+
+@Preview
+@Composable
+fun CategoryPickerPreview() {
+    CategoryPicker(onSelected = {})
 }
