@@ -70,8 +70,8 @@ fun AddEditTaskContent(
             .fillMaxSize()
             .imePadding()
             .clickable { onBackClick() }
-            .background(MaterialTheme.colorScheme.background.copy(alpha = 0.6f)),
-        contentAlignment = Alignment.BottomCenter
+            .background(MaterialTheme.colorScheme.background.copy(alpha = 0.9f)),
+        contentAlignment = Alignment.Center
     ) {
         Column(
             modifier = Modifier

@@ -38,13 +38,8 @@ fun App(modifier: Modifier) {
                         }
                     }
 
-                    dialog(
+                    composable(
                         "add_task",
-                        dialogProperties = DialogProperties(
-                            usePlatformDefaultWidth = false,
-                            dismissOnBackPress = true,
-                            dismissOnClickOutside = true
-                        )
                     ) {
                         AddEditTaskScreen(null, onBackClick = { navController.popBackStack() }, onSaveClick = {})
                     }
