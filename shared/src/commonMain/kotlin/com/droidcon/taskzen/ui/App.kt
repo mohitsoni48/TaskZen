@@ -33,9 +33,14 @@ fun App(modifier: Modifier) {
                         .padding(0.dp)
                 ) {
                     composable("home") {
-                        Home() {
-                            navController.navigate("add_task")
-                        }
+                        Home(
+                            onAddTaskClick = {
+                                navController.navigate("add_task")
+                            },
+                            onTaskClick = { task ->
+                                navController.navigate("edit_task/${task.id}")
+                            }
+                        )
                     }
 
                     composable(

@@ -42,7 +42,6 @@ import org.jetbrains.compose.resources.painterResource
 fun AddEditTaskScreen(
     taskId: Long?,
     onBackClick: () -> Unit,
-    onSaveClick: (String) -> Unit
 ) {
 
 }

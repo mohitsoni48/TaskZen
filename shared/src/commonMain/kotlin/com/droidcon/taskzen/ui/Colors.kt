@@ -11,3 +11,5 @@ val primaryLight = Color(0xFF8687E7)
 val secondaryLight = Color(0xFF363636)
 val tertiaryLight = Color(0xFFFFFFFF)
 val outlineLight = Color(0xFF979797)
+
+val lightText = Color(0xFFAFAFAF)

@@ -17,6 +17,7 @@ import com.droidcon.taskzen.ui.AddEditTaskContent
 import com.droidcon.taskzen.ui.App
 import com.droidcon.taskzen.ui.CategoryPicker
 import com.droidcon.taskzen.ui.MyApplicationTheme
+import com.droidcon.taskzen.ui.TaskElement
 import org.koin.core.context.GlobalContext.startKoin
 
 class MainActivity : ComponentActivity() {
@@ -42,4 +43,14 @@ private fun AddEditTaskContentPreview() {
 @Composable
 fun CategoryPickerPreview() {
     CategoryPicker(onSelected = {})
+}
+
+@Preview
+@Composable
+fun TaskElementPreview() {
+    TaskElement(
+        task = Task(1, "Task 1", "", TaskCategory.GROCERY, System.currentTimeMillis(), false, 1),
+        onMarkAsComplete = {},
+        onClick = {}
+    )
 }
