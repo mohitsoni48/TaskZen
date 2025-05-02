@@ -15,6 +15,11 @@ import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,6 +30,9 @@ import com.droidcon.taskzen.formattedDate
 import com.droidcon.taskzen.getContrastingTextColor
 import com.droidcon.taskzen.models.Task
 import com.droidcon.taskzen.toLocalDateTime
+import com.droidcon.taskzen.toRemainingTime
+import kotlinx.coroutines.delay
+import kotlinx.datetime.Clock.System
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -55,13 +63,7 @@ fun TaskElement(
         Column(modifier = Modifier.weight(1f)) {
             Text(task.title, fontSize = 16.sp, color = Color.White, textDecoration = if (task.isCompleted) TextDecoration.LineThrough else null)
             Spacer(Modifier.height(6.dp))
-            Text(
-                task.dueDate?.toLocalDateTime()?.formattedDate() ?: task.description,
-                fontSize = 14.sp,
-                color = lightText,
-                modifier = Modifier.padding(top = 4.dp),
-                textDecoration = if (task.isCompleted) TextDecoration.LineThrough else null
-            )
+            DueDate(task)
         }
 
         Spacer(Modifier.width(4.dp))
@@ -84,4 +86,33 @@ fun TaskElement(
             )
         }
     }
+}
+
+@Composable
+private fun DueDate(task: Task) {
+    var text by remember {
+        mutableStateOf(
+            when {
+                task.isCompleted || task.dueDate == null -> task.description
+                else -> ""
+            }
+        )
+    }
+
+    LaunchedEffect(task.dueDate, task.isCompleted) {
+        while (task.dueDate != null && !task.isCompleted) {
+            val remainingTime = task.dueDate - System.now().toEpochMilliseconds()
+            text = "Due in " + remainingTime.coerceAtLeast(0).toRemainingTime()
+            delay(1000)
+        }
+    }
+
+    Text(
+        text,
+        fontSize = 14.sp,
+        color = lightText,
+        modifier = Modifier.padding(top = 4.dp),
+        textDecoration = if (task.isCompleted) TextDecoration.LineThrough else null,
+        maxLines = 2
+    )
 }

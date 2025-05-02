@@ -43,6 +43,7 @@ import com.droidcon.taskzen.generated.resources.timer
 import com.droidcon.taskzen.models.Task
 import com.droidcon.taskzen.models.TaskCategory
 import com.droidcon.taskzen.viewmodels.TaskViewModel
+import kotlinx.coroutines.flow.map
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -53,7 +54,7 @@ fun AddEditTaskScreen(
 ) {
     val taskViewModel: TaskViewModel = koinViewModel()
 
-    val task: Task? by taskViewModel.currentTask.collectAsState()
+    val task: Task? by taskViewModel.tasksViewState.map { it.currentTask }.collectAsState(null)
 
     LaunchedEffect(Unit) {
         taskViewModel.getTask(taskId)

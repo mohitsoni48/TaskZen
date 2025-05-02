@@ -79,4 +79,5 @@ private fun TaskEntity.toTask() = Task(
     category = category,
     dueDate = dueDate,
     isCompleted = isCompleted,
+    updatedAt = updatedAt
 )

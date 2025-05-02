@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 private fun AddEditTaskContentPreview() {
     AddEditTaskContent(
-        task = Task(1, "Task 1", "", TaskCategory.GROCERY, null, false),
+        task = Task(1, "Task 1", "", TaskCategory.GROCERY, null, System.currentTimeMillis() ,false),
         onBackClick = {},
         onSaveClick = {},
         updateTitle = {},
@@ -54,7 +54,7 @@ fun CategoryPickerPreview() {
 @Composable
 fun TaskElementPreview() {
     TaskElement(
-        task = Task(1, "Task 1", "", TaskCategory.GROCERY, System.currentTimeMillis(), false),
+        task = Task(1, "Task 1", "", TaskCategory.GROCERY, null, System.currentTimeMillis(), false),
         onMarkAsComplete = {},
         onClick = {}
     )

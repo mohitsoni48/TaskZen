@@ -2,6 +2,8 @@ package com.droidcon.taskzen.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.droidcon.taskzen.models.FILTER
+import com.droidcon.taskzen.models.SORT
 import com.droidcon.taskzen.models.Task
 import com.droidcon.taskzen.models.TaskCategory
 import com.droidcon.taskzen.repositories.TaskRepository
@@ -14,15 +16,10 @@ class TaskViewModel(
     private val taskRepository: TaskRepository
 ): ViewModel() {
 
-    val tasks: StateFlow<List<Task>>
-        get() = _tasks
+    val tasksViewState: StateFlow<TaskViewState>
+        get() = _tasksViewState
 
-    private val _tasks: MutableStateFlow<List<Task>> = MutableStateFlow(listOf())
-
-    val currentTask: StateFlow<Task?>
-        get() = _currentTask
-
-    private val _currentTask: MutableStateFlow<Task?> = MutableStateFlow(null)
+    private val _tasksViewState: MutableStateFlow<TaskViewState> = MutableStateFlow(TaskViewState())
 
     fun getTask(taskId: Long?) {
 
@@ -34,8 +31,11 @@ class TaskViewModel(
                 isCompleted = false,
                 category = TaskCategory.WORK,
                 dueDate = null,
+                updatedAt = kotlinx.datetime.Clock.System.now().toEpochMilliseconds(),
             )
-            _currentTask.value = task
+            _tasksViewState.value = _tasksViewState.value.copy(
+                currentTask = task,
+            )
         }
     }
 
@@ -48,7 +48,9 @@ class TaskViewModel(
 
     fun fetchTasks() {
         viewModelScope.launch {
-            _tasks.value = taskRepository.getAllTasks()
+            _tasksViewState.value = _tasksViewState.value.copy(
+                tasks = taskRepository.getAllTasks(),
+            )
         }
     }
 
@@ -67,28 +69,60 @@ class TaskViewModel(
             } else {
                 taskRepository.insertTask(task)
             }
-            _currentTask.value = null
+
+            _tasksViewState.value = _tasksViewState.value.copy(
+                currentTask = null,
+            )
             fetchTasks()
         }
     }
 
     fun onDismiss() {
-        _currentTask.value = null
+        _tasksViewState.value = _tasksViewState.value.copy(
+            currentTask = null,
+        )
     }
 
     fun updateTaskTitle(title: String) {
-        _currentTask.value = _currentTask.value?.copy(title = title)
+        _tasksViewState.value = _tasksViewState.value.copy(
+            currentTask = _tasksViewState.value.currentTask?.copy(title = title),
+        )
     }
 
     fun updateTaskDescription(description: String) {
-        _currentTask.value = _currentTask.value?.copy(description = description)
+        _tasksViewState.value = _tasksViewState.value.copy(
+            currentTask = _tasksViewState.value.currentTask?.copy(description = description),
+        )
     }
 
     fun updateTaskCategory(category: TaskCategory) {
-        _currentTask.value = _currentTask.value?.copy(category = category)
+        _tasksViewState.value = _tasksViewState.value.copy(
+            currentTask = _tasksViewState.value.currentTask?.copy(category = category),
+        )
     }
 
     fun updateTaskDueDate(dueDate: Long) {
-        _currentTask.value = _currentTask.value?.copy(dueDate = dueDate)
+        _tasksViewState.value = _tasksViewState.value.copy(
+            currentTask = _tasksViewState.value.currentTask?.copy(dueDate = dueDate),
+        )
+    }
+
+    fun selectedFilter(filter: FILTER) {
+        _tasksViewState.value = _tasksViewState.value.copy(
+            selectedFILTER = filter,
+        )
+    }
+
+    fun selectedSort(sort: SORT) {
+        _tasksViewState.value = _tasksViewState.value.copy(
+            selectedSORT = sort,
+        )
     }
 }
+
+data class TaskViewState(
+    val tasks: List<Task> = emptyList(),
+    val currentTask: Task? = null,
+    val selectedFILTER: FILTER = FILTER.ALL,
+    val selectedSORT: SORT = SORT.LATEST,
+)

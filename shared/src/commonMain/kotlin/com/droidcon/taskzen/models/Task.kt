@@ -6,5 +6,6 @@ data class Task(
     val description: String,
     val category: TaskCategory,
     val dueDate: Long?,
+    val updatedAt: Long,
     val isCompleted: Boolean = false,
 )
