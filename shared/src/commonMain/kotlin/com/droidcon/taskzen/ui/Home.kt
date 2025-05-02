@@ -10,10 +10,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.droidcon.taskzen.generated.resources.Res
 import com.droidcon.taskzen.generated.resources.empty_todo
+import com.droidcon.taskzen.generated.resources.filter_icon
 import com.droidcon.taskzen.models.Task
 import com.droidcon.taskzen.viewmodels.TaskViewModel
 import org.jetbrains.compose.resources.painterResource
@@ -34,6 +35,10 @@ fun Home(
 ) {
     val taskViewModel: TaskViewModel = koinViewModel()
     val tasks by taskViewModel.tasks.collectAsState()
+
+    LaunchedEffect(Unit) {
+        taskViewModel.fetchTasks()
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         HomePageContent(Modifier, tasks, onTaskClick, taskViewModel::onMarkAsComplete)
@@ -56,22 +61,26 @@ fun HomePageContent(
     onTaskClick: (Task) -> Unit,
     onMarkAsComplete: (Task, Boolean) -> Unit,
 ) {
-    if (tasks.isEmpty()) {
-        EmptyTodo(modifier)
-    } else {
-        LazyColumn(modifier.fillMaxSize()) {
-            items(tasks.size) {
-                val task = tasks[it]
-                TaskElement(
-                    task = task,
-                    onMarkAsComplete = { isCompleted ->
-                        onMarkAsComplete(task, isCompleted)
-                    },
-                    onClick = {
-                        onTaskClick(task)
-                    }
-                )
-            }
+    Column {
+        Spacer(Modifier.height(26.dp))
+        Image(
+            painter = painterResource(Res.drawable.filter_icon),
+            contentDescription = "filter",
+            modifier = Modifier
+                .size(42.dp)
+                .clickable {  }
+        )
+        Spacer(Modifier.height(20.dp))
+        if (tasks.isEmpty()) {
+            EmptyTodo(modifier)
+        } else {
+            TaskListScreen(
+                tasks,
+                onMarkAsComplete = onMarkAsComplete,
+                openTask = { task ->
+                    onTaskClick(task)
+                },
+            )
         }
     }
 }

@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.droidcon.taskzen.formattedDate
@@ -34,7 +35,7 @@ fun TaskElement(
 ) {
     Row(
         modifier = Modifier
-            .padding(vertical = 8.dp)
+            .padding(8.dp)
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.secondary, shape = MaterialTheme.shapes.medium)
             .clickable { onClick() }
@@ -44,7 +45,7 @@ fun TaskElement(
         Checkbox(
             checked = task.isCompleted,
             onCheckedChange = {
-                onMarkAsComplete(task.isCompleted)
+                onMarkAsComplete(it)
             },
             colors = CheckboxDefaults.colors(checkedColor = MaterialTheme.colorScheme.primary, uncheckedColor = Color.White),
         )
@@ -52,13 +53,14 @@ fun TaskElement(
         Spacer(Modifier.width(12.dp))
 
         Column(modifier = Modifier.weight(1f)) {
-            Text(task.title, fontSize = 16.sp, color = Color.White)
+            Text(task.title, fontSize = 16.sp, color = Color.White, textDecoration = if (task.isCompleted) TextDecoration.LineThrough else null)
             Spacer(Modifier.height(6.dp))
             Text(
                 task.dueDate?.toLocalDateTime()?.formattedDate() ?: task.description,
                 fontSize = 14.sp,
                 color = lightText,
-                modifier = Modifier.padding(top = 4.dp)
+                modifier = Modifier.padding(top = 4.dp),
+                textDecoration = if (task.isCompleted) TextDecoration.LineThrough else null
             )
         }
 
@@ -78,7 +80,7 @@ fun TaskElement(
                 task.category.name,
                 fontSize = 12.sp,
                 color = task.category.color.getContrastingTextColor(),
-                modifier = Modifier.padding(start = 4.dp)
+                modifier = Modifier.padding(start = 4.dp),
             )
         }
     }

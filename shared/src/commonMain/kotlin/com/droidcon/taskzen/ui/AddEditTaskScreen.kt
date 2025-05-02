@@ -22,6 +22,9 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,61 +35,107 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.droidcon.taskzen.BackHandler
 import com.droidcon.taskzen.generated.resources.Res
+import com.droidcon.taskzen.generated.resources.delete
 import com.droidcon.taskzen.generated.resources.send
 import com.droidcon.taskzen.generated.resources.timer
 import com.droidcon.taskzen.models.Task
+import com.droidcon.taskzen.models.TaskCategory
+import com.droidcon.taskzen.viewmodels.TaskViewModel
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun AddEditTaskScreen(
     taskId: Long?,
     onBackClick: () -> Unit,
 ) {
+    val taskViewModel: TaskViewModel = koinViewModel()
 
+    val task: Task? by taskViewModel.currentTask.collectAsState()
+
+    LaunchedEffect(Unit) {
+        taskViewModel.getTask(taskId)
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            taskViewModel.onDismiss()
+        }
+    }
+
+    task?.let {
+        AddEditTaskContent(
+            it,
+            updateTitle = { taskViewModel.updateTaskTitle(it) },
+            updateDescription = { taskViewModel.updateTaskDescription(it) },
+            updateCategory = { taskViewModel.updateTaskCategory(it) },
+            updateDueDate = { taskViewModel.updateTaskDueDate(it) },
+            onBackClick = onBackClick,
+            onSaveClick = { taskViewModel.addTask(it) },
+            onDelete = { taskViewModel.deleteTask(it) }
+        )
+    }
 }
 
 @Composable
 fun AddEditTaskContent(
     task: Task,
+    updateTitle: (String) -> Unit,
+    updateDescription: (String) -> Unit,
+    updateCategory: (TaskCategory) -> Unit,
+    updateDueDate: (Long) -> Unit,
     onBackClick: () -> Unit,
-    onSaveClick: (String) -> Unit
+    onSaveClick: (Task) -> Unit,
+    onDelete: (Task) -> Unit
 ) {
-    var title by remember {
-        mutableStateOf(task.title)
-    }
-
-    var description by remember {
-        mutableStateOf(task.description)
-    }
 
     var openTimePicker by remember {
         mutableStateOf(false)
+    }
+
+    var openCategoryPicker by remember {
+        mutableStateOf(false)
+    }
+
+    BackHandler {
+        when {
+            openTimePicker -> {
+                openTimePicker = false
+            }
+            openCategoryPicker -> {
+                openCategoryPicker = false
+            }
+            else -> {
+                onBackClick()
+            }
+        }
     }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .imePadding()
-            .clickable { onBackClick() }
             .background(MaterialTheme.colorScheme.background.copy(alpha = 0.9f)),
         contentAlignment = Alignment.Center
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .background(
-                    secondary,
-                    shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+                    tertiary,
+                    shape = RoundedCornerShape(16.dp)
                 )
                 .padding(25.dp)
         ) {
+            Spacer(Modifier.height(32.dp))
             Text("Add Task", color = White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
             Spacer(Modifier.height(14.dp))
             Box {
                 BasicTextField(
-                    value = title,
-                    onValueChange = { title = it },
+                    value = task.title,
+                    onValueChange = { updateTitle(it) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .border(
@@ -101,7 +150,7 @@ fun AddEditTaskContent(
                     ),
                 )
 
-                if (title.isEmpty()) {
+                if (task.title.isEmpty()) {
                     Text(
                         "Title", style = MaterialTheme.typography.headlineMedium.copy(
                             color = MaterialTheme.colorScheme.outline,
@@ -115,13 +164,13 @@ fun AddEditTaskContent(
 
             Spacer(Modifier.height(14.dp))
 
-            Box {
+            Box(modifier = Modifier.weight(1f)) {
                 BasicTextField(
-                    value = description,
-                    onValueChange = { description = it },
+                    value = task.description,
+                    onValueChange = { updateDescription(it) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(min = 75.dp)
+                        .heightIn(min = 175.dp)
                         .padding(vertical = 8.dp, horizontal = 16.dp),
                     textStyle = MaterialTheme.typography.bodyMedium.copy(
                         color = White,
@@ -129,9 +178,10 @@ fun AddEditTaskContent(
                     ),
                 )
 
-                if (description.isEmpty()) {
+                if (task.description.isEmpty()) {
                     Text(
-                        "Description", style = MaterialTheme.typography.headlineMedium.copy(
+                        "Description",
+                        style = MaterialTheme.typography.headlineMedium.copy(
                             color = MaterialTheme.colorScheme.outline,
                             fontSize = 18.sp
                         ),
@@ -157,17 +207,53 @@ fun AddEditTaskContent(
                         .size(24.dp)
                         .background(task.category.color, CircleShape)
                         .clickable {
+                            openCategoryPicker = true
                         }
                 )
                 Spacer(Modifier.weight(1f))
                 Image(
+                    painter = painterResource(Res.drawable.delete),
+                    contentDescription = "save",
+                    modifier = Modifier.size(24.dp).clickable {
+                        onDelete(task)
+                        onBackClick()
+                    }
+                )
+
+                Spacer(Modifier.width(16.dp))
+
+                Image(
                     painter = painterResource(Res.drawable.send),
                     contentDescription = "save",
                     modifier = Modifier.size(24.dp).clickable {
-                        onSaveClick(title)
-                    })
-                Spacer(Modifier.width(32.dp))
+                        onSaveClick(task)
+                        onBackClick()
+                    }
+                )
+                Spacer(Modifier.width(16.dp))
             }
+            Spacer(Modifier.height(32.dp))
         }
+    }
+
+    if (openTimePicker) {
+        DateTimePicker(
+            task.dueDate,
+            onSelected = {
+                updateDueDate(it)
+                openTimePicker = false
+            },
+            onDismiss = { openTimePicker = false }
+        )
+    }
+
+    if (openCategoryPicker) {
+        CategoryPicker(
+            onSelected = {
+                updateCategory(it)
+                openCategoryPicker = false
+            },
+            onDismiss = { openCategoryPicker = false }
+        )
     }
 }

@@ -7,5 +7,4 @@ data class Task(
     val category: TaskCategory,
     val dueDate: Long?,
     val isCompleted: Boolean = false,
-    val order: Int
 )

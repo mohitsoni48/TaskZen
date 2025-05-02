@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.droidcon.taskzen.toLocalDateTime
 import dev.darkokoa.datetimewheelpicker.WheelDateTimePicker
+import dev.darkokoa.datetimewheelpicker.core.WheelPickerDefaults
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 
@@ -36,12 +37,19 @@ fun DateTimePicker(startDateTime: Long?, onSelected: (Long) -> Unit, onDismiss: 
         modifier = Modifier
             .fillMaxSize()
             .clickable { onDismiss() }
-            .background(Black.copy(alpha = 0.8f)),
+            .background(secondary.copy(alpha = 0.8f)),
         contentAlignment = Alignment.Center
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .padding(20.dp)
+                .background(MaterialTheme.colorScheme.secondary, shape = MaterialTheme.shapes.medium)
+                .padding(20.dp)
+        ) {
             WheelDateTimePicker(
-                startDateTime = startDateTime.toLocalDateTime()
+                startDateTime = startDateTime.toLocalDateTime(),
+                selectorProperties = WheelPickerDefaults.selectorProperties(color = White)
             ) { snappedDateTime ->
                 snappedTime = snappedDateTime.toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds()
             }

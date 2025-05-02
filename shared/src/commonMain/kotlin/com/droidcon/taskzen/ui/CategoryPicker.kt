@@ -24,10 +24,11 @@ import com.droidcon.taskzen.models.TaskCategory
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun CategoryPicker(onSelected: (TaskCategory) -> Unit) {
+fun CategoryPicker(onSelected: (TaskCategory) -> Unit, onDismiss: () -> Unit) {
     Box(modifier = Modifier
         .fillMaxSize()
-        .background(MaterialTheme.colorScheme.background.copy(alpha = 0.6f)),
+        .clickable { onDismiss() }
+        .background(secondary.copy(alpha = 0.8f)),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -47,7 +48,7 @@ fun CategoryPicker(onSelected: (TaskCategory) -> Unit) {
                     ) {
                         Image(painter = painterResource(category.res), contentDescription = category.name, modifier = Modifier.size(64.dp))
                         Spacer(Modifier.height(8.dp))
-                        Text(category.name, fontSize = 14.sp, color = Color.White)
+                        Text(category.name, fontSize = 9.sp, color = Color.White)
                     }
                 }
             }

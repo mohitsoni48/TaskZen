@@ -1,11 +1,13 @@
 package com.droidcon.taskzen
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.format.char
 import kotlinx.datetime.toLocalDateTime
 
 interface Platform {
@@ -22,8 +24,21 @@ fun Long?.toLocalDateTime(): LocalDateTime {
     }
 }
 
+val formatter = LocalDateTime.Format {
+    dayOfMonth()
+    char('-')
+    monthNumber()
+    char('-')
+    year()
+    char(' ')
+    hour()
+    char(':')
+    minute()
+    char(':')
+    second()
+}
 fun LocalDateTime.formattedDate(): String {
-    return "${this.year}-${this.monthNumber.toString().padStart(2, '0')}-${this.dayOfMonth.toString().padStart(2, '0')}"
+    return formatter.format(this)
 }
 
 fun Color.getContrastingTextColor(): Color {
@@ -35,3 +50,6 @@ fun Color.getContrastingTextColor(): Color {
 
     return if (luminance > 0.5) Color.Black else Color.White
 }
+
+@Composable
+expect fun BackHandler(onBack: () -> Unit)

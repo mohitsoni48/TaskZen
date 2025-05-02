@@ -12,6 +12,7 @@ interface TaskRepository {
     suspend fun insertTask(task: Task)
     suspend fun updateTask(task: Task)
     suspend fun deleteTask(id: Long)
+    suspend fun getTaskById(id: Long): Task?
     suspend fun markTaskAsCompleted(id: Long)
     suspend fun markTaskAsIncomplete(id: Long)
 }
@@ -33,18 +34,28 @@ class TaskRepositoryImpl(
     }
 
     override suspend fun deleteTask(id: Long) {
-        val task = taskDao.getTaskById(id)!!
-        taskDao.updateTask(task.copy(isDeleted = true))
+        val task = taskDao.getTaskById(id)
+        task?.let {
+            taskDao.updateTask(task.copy(isDeleted = true))
+        }
     }
 
     override suspend fun markTaskAsCompleted(id: Long) {
-        val task = taskDao.getTaskById(id)!!
-        taskDao.updateTask(task.copy(isCompleted = true))
+        val task = taskDao.getTaskById(id)
+        task?.let {
+            taskDao.updateTask(task.copy(isCompleted = true))
+        }
     }
 
     override suspend fun markTaskAsIncomplete(id: Long) {
-        val task = taskDao.getTaskById(id)!!
-        taskDao.updateTask(task.copy(isCompleted = false))
+        val task = taskDao.getTaskById(id)
+        task?.let {
+            taskDao.updateTask(task.copy(isCompleted = false))
+        }
+    }
+
+    override suspend fun getTaskById(id: Long): Task? {
+        return taskDao.getTaskById(id)?.toTask()
     }
 }
 
@@ -68,5 +79,4 @@ private fun TaskEntity.toTask() = Task(
     category = category,
     dueDate = dueDate,
     isCompleted = isCompleted,
-    order = 0
 )

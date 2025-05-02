@@ -1,6 +1,7 @@
 package com.droidcon.taskzen.ui
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -19,7 +20,7 @@ fun App(modifier: Modifier) {
 
     MyApplicationTheme {
         Surface(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().displayCutoutPadding(),
             color = MaterialTheme.colorScheme.tertiary
         ) {
             val navController = rememberNavController()
@@ -46,12 +47,12 @@ fun App(modifier: Modifier) {
                     composable(
                         "add_task",
                     ) {
-                        AddEditTaskScreen(null, onBackClick = { navController.popBackStack() }, onSaveClick = {})
+                        AddEditTaskScreen(null, onBackClick = { navController.popBackStack() })
                     }
 
-                    composable("edit_task") {
+                    composable("edit_task/{taskId}") {
                         val taskId = it.arguments?.getString("taskId")?.toLongOrNull()!!
-                        AddEditTaskScreen(taskId, onBackClick = { navController.popBackStack() }, onSaveClick = {})
+                        AddEditTaskScreen(taskId, onBackClick = { navController.popBackStack() })
                     }
                 }
             }

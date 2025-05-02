@@ -20,25 +20,23 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun TaskListScreen(
     tasks: List<Task>,
-    onMarkAsComplete: (Boolean) -> Unit,
+    onMarkAsComplete: (Task, Boolean) -> Unit,
     openTask: (Task) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
-        Image(
-            painter = painterResource(Res.drawable.filter_icon),
-            contentDescription = "filter",
-            modifier = Modifier
-                .size(42.dp)
-                .clickable {  }
-        )
-        Spacer(Modifier.height(20.dp))
         LazyColumn(
             modifier = Modifier.fillMaxWidth()
         ) {
             items(tasks.size) { index ->
-                TaskElement(tasks[index], onMarkAsComplete) {
-                    openTask(tasks[index])
-                }
+                TaskElement(
+                    task = tasks[index],
+                    onMarkAsComplete = {
+                        onMarkAsComplete(tasks[index], it)
+                    },
+                    onClick = {
+                        openTask(tasks[index])
+                    }
+                )
             }
         }
     }
