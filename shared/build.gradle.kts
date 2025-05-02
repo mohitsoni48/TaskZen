@@ -38,6 +38,7 @@ kotlin {
 
             //room
             implementation(libs.androidx.room.runtime)
+            implementation(libs.room.driver)
 
             //koin
             implementation(project.dependencies.platform(libs.koin.bom))
