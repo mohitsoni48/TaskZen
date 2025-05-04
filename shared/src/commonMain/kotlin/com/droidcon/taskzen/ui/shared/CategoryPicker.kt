@@ -1,4 +1,4 @@
-package com.droidcon.taskzen.ui
+package com.droidcon.taskzen.ui.shared
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.droidcon.taskzen.models.TaskCategory
+import com.droidcon.taskzen.ui.theme.secondary
 import org.jetbrains.compose.resources.painterResource
 
 @Composable

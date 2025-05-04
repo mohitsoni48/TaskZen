@@ -1,4 +1,4 @@
-package com.droidcon.taskzen.ui
+package com.droidcon.taskzen.ui.task
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,11 +26,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.droidcon.taskzen.formattedDate
 import com.droidcon.taskzen.getContrastingTextColor
 import com.droidcon.taskzen.models.Task
-import com.droidcon.taskzen.toLocalDateTime
 import com.droidcon.taskzen.toRemainingTime
+import com.droidcon.taskzen.ui.theme.lightText
 import kotlinx.coroutines.delay
 import kotlinx.datetime.Clock.System
 import org.jetbrains.compose.resources.painterResource

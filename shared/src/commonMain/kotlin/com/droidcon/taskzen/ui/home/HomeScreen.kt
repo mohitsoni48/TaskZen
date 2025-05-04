@@ -1,4 +1,4 @@
-package com.droidcon.taskzen.ui
+package com.droidcon.taskzen.ui.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,9 +20,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,13 +27,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.droidcon.taskzen.generated.resources.Res
 import com.droidcon.taskzen.generated.resources.empty_todo
-import com.droidcon.taskzen.generated.resources.filter_icon
-import com.droidcon.taskzen.models.FILTER
-import com.droidcon.taskzen.models.SORT
+import com.droidcon.taskzen.models.Filter
+import com.droidcon.taskzen.models.Sort
 import com.droidcon.taskzen.models.Task
 import com.droidcon.taskzen.next
+import com.droidcon.taskzen.ui.shared.AddTaskButton
+import com.droidcon.taskzen.ui.task.TaskListScreen
+import com.droidcon.taskzen.ui.theme.secondary
 import com.droidcon.taskzen.viewmodels.TaskViewModel
-import kotlinx.coroutines.flow.map
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -49,8 +47,8 @@ fun Home(
     val viewState by taskViewModel.tasksViewState.collectAsState()
 
     val tasks = viewState.tasks
-    val selectedFilter = viewState.selectedFILTER
-    val selectedSort = viewState.selectedSORT
+    val selectedFilter = viewState.selectedFilter
+    val selectedSort = viewState.selectedSort
 
     LaunchedEffect(Unit) {
         taskViewModel.fetchTasks()
@@ -83,49 +81,42 @@ fun Home(
 fun HomePageContent(
     modifier: Modifier,
     tasks: List<Task>,
-    selectedFilter: FILTER,
-    selectedSort: SORT,
+    selectedFilter: Filter,
+    selectedSort: Sort,
     onTaskClick: (Task) -> Unit,
     onMarkAsComplete: (Task, Boolean) -> Unit,
-    onFilterClick: (FILTER) -> Unit = {},
-    onSortClick: (SORT) -> Unit = {},
+    onFilterClick: (Filter) -> Unit = {},
+    onSortClick: (Sort) -> Unit = {},
 ) {
 
     val sortedTask by derivedStateOf {
         val filtered = tasks.filter {
             when (selectedFilter) {
-                FILTER.ALL -> true
-                FILTER.COMPLETED -> it.isCompleted
-                FILTER.UNCOMPLETED -> !it.isCompleted
+                Filter.ALL -> true
+                Filter.COMPLETED -> it.isCompleted
+                Filter.UNCOMPLETED -> !it.isCompleted
             }
         }
 
         when (selectedSort) {
-            SORT.LATEST -> filtered.sortedByDescending { it.updatedAt }
-            SORT.OLDEST -> filtered.sortedBy { it.updatedAt }
-            SORT.COMPLETED -> filtered.sortedBy { if (it.isCompleted) 0 else 1 }
-            SORT.UNCOMPLETED -> filtered.sortedBy { if (it.isCompleted) 1 else 0 }
-            SORT.DUE_DATE -> filtered.sortedBy { it.dueDate ?: Long.MAX_VALUE }
+            Sort.LATEST -> filtered.sortedByDescending { it.updatedAt }
+            Sort.OLDEST -> filtered.sortedBy { it.updatedAt }
+            Sort.COMPLETED -> filtered.sortedBy { if (it.isCompleted) 0 else 1 }
+            Sort.UNCOMPLETED -> filtered.sortedBy { if (it.isCompleted) 1 else 0 }
+            Sort.DUE_DATE -> filtered.sortedBy { it.dueDate ?: Long.MAX_VALUE }
         }
     }
 
     Column {
         Spacer(Modifier.height(26.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Image(
-                painter = painterResource(Res.drawable.filter_icon),
-                contentDescription = "filter",
-                modifier = Modifier
-                    .size(42.dp)
-                    .clickable {  }
-            )
             Spacer(Modifier.width(20.dp))
 
             FilterButton(
                 title = "Filter",
                 selected = selectedFilter.name,
                 onClick = {
-                    onFilterClick(FILTER.entries.next(selectedFilter))
+                    onFilterClick(Filter.entries.next(selectedFilter))
                 }
             )
 
@@ -133,9 +124,9 @@ fun HomePageContent(
 
             FilterButton(
                 title = "Sort",
-                selected = selectedSort.name,
+                selected = selectedSort.displayName,
                 onClick = {
-                    onSortClick(SORT.entries.next(selectedSort))
+                    onSortClick(Sort.entries.next(selectedSort))
                 }
             )
         }

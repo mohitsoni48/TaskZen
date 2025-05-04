@@ -1,4 +1,4 @@
-package com.droidcon.taskzen.ui
+package com.droidcon.taskzen.ui.task
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

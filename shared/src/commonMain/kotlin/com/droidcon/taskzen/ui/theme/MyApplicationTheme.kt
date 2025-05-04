@@ -1,4 +1,4 @@
-package com.droidcon.taskzen.ui
+package com.droidcon.taskzen.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme

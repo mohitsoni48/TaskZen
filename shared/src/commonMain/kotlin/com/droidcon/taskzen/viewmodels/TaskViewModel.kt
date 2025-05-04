@@ -2,15 +2,14 @@ package com.droidcon.taskzen.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.droidcon.taskzen.models.FILTER
-import com.droidcon.taskzen.models.SORT
+import com.droidcon.taskzen.models.Filter
+import com.droidcon.taskzen.models.Sort
 import com.droidcon.taskzen.models.Task
 import com.droidcon.taskzen.models.TaskCategory
 import com.droidcon.taskzen.repositories.TaskRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import kotlin.time.Clock
 
 class TaskViewModel(
     private val taskRepository: TaskRepository
@@ -107,15 +106,15 @@ class TaskViewModel(
         )
     }
 
-    fun selectedFilter(filter: FILTER) {
+    fun selectedFilter(filter: Filter) {
         _tasksViewState.value = _tasksViewState.value.copy(
-            selectedFILTER = filter,
+            selectedFilter = filter,
         )
     }
 
-    fun selectedSort(sort: SORT) {
+    fun selectedSort(sort: Sort) {
         _tasksViewState.value = _tasksViewState.value.copy(
-            selectedSORT = sort,
+            selectedSort = sort,
         )
     }
 }
@@ -123,6 +122,6 @@ class TaskViewModel(
 data class TaskViewState(
     val tasks: List<Task> = emptyList(),
     val currentTask: Task? = null,
-    val selectedFILTER: FILTER = FILTER.ALL,
-    val selectedSORT: SORT = SORT.LATEST,
+    val selectedFilter: Filter = Filter.ALL,
+    val selectedSort: Sort = Sort.LATEST,
 )

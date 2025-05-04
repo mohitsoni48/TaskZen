@@ -1,9 +1,7 @@
 package com.droidcon.taskzen.models
 
-enum class SORT {
+enum class Filter {
+    ALL,
     COMPLETED,
     UNCOMPLETED,
-    LATEST,
-    OLDEST,
-    DUE_DATE,
 }

@@ -2,19 +2,11 @@ package com.droidcon.taskzen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.format.char
 import kotlinx.datetime.toLocalDateTime
-
-interface Platform {
-    val name: String
-}
-
-expect fun getPlatform(): Platform
 
 fun Long?.toLocalDateTime(): LocalDateTime {
     return if (this != null) {
@@ -22,23 +14,6 @@ fun Long?.toLocalDateTime(): LocalDateTime {
     } else {
         Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
     }
-}
-
-val formatter = LocalDateTime.Format {
-    dayOfMonth()
-    char('-')
-    monthNumber()
-    char('-')
-    year()
-    char(' ')
-    hour()
-    char(':')
-    minute()
-    char(':')
-    second()
-}
-fun LocalDateTime.formattedDate(): String {
-    return formatter.format(this)
 }
 
 fun Long.toRemainingTime(): String {

@@ -1,4 +1,4 @@
-package com.droidcon.taskzen.ui
+package com.droidcon.taskzen.ui.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.displayCutoutPadding
@@ -9,11 +9,15 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
+import com.droidcon.taskzen.models.AddTask
+import com.droidcon.taskzen.models.EditTask
+import com.droidcon.taskzen.models.Home
+import com.droidcon.taskzen.ui.task.AddEditTaskScreen
+import com.droidcon.taskzen.ui.theme.MyApplicationTheme
 
 @Composable
 fun App(modifier: Modifier) {
@@ -28,30 +32,28 @@ fun App(modifier: Modifier) {
             Box(modifier = modifier.fillMaxSize()) {
                 NavHost(
                     navController = navController,
-                    startDestination = "home",
+                    startDestination = Home,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(0.dp)
                 ) {
-                    composable("home") {
+                    composable<Home> {
                         Home(
                             onAddTaskClick = {
-                                navController.navigate("add_task")
+                                navController.navigate(AddTask)
                             },
                             onTaskClick = { task ->
-                                navController.navigate("edit_task/${task.id}")
+                                navController.navigate(EditTask(task.id))
                             }
                         )
                     }
 
-                    composable(
-                        "add_task",
-                    ) {
+                    composable<AddTask>{
                         AddEditTaskScreen(null, onBackClick = { navController.popBackStack() })
                     }
 
-                    composable("edit_task/{taskId}") {
-                        val taskId = it.arguments?.getString("taskId")?.toLongOrNull()!!
+                    composable<EditTask> {
+                        val taskId = it.toRoute<EditTask>().taskId
                         AddEditTaskScreen(taskId, onBackClick = { navController.popBackStack() })
                     }
                 }

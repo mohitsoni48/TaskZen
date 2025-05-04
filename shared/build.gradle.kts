@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.room)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.kotlinx.serialization)
 }
 
 kotlin {
@@ -56,6 +57,7 @@ kotlin {
             implementation(libs.navigation.compose)
 
             api(libs.kotlinx.datetime)
+            implementation(libs.kotlinx.serialization)
             implementation(libs.datetime.wheel.picker)
         }
         commonTest.dependencies {

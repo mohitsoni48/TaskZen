@@ -3,10 +3,8 @@ package com.droidcon.taskzen.repositories
 import com.droidcon.taskzen.data.TaskDAO
 import com.droidcon.taskzen.data.TaskEntity
 import com.droidcon.taskzen.models.Task
-import kotlin.time.Clock
-import kotlin.time.ExperimentalTime
+import kotlinx.datetime.Clock.System
 
-@OptIn(ExperimentalTime::class)
 interface TaskRepository {
     suspend fun getAllTasks(): List<Task>
     suspend fun insertTask(task: Task)
@@ -17,7 +15,6 @@ interface TaskRepository {
     suspend fun markTaskAsIncomplete(id: Long)
 }
 
-@OptIn(ExperimentalTime::class)
 class TaskRepositoryImpl(
     private val taskDao: TaskDAO
 ) : TaskRepository {
@@ -59,7 +56,6 @@ class TaskRepositoryImpl(
     }
 }
 
-@OptIn(ExperimentalTime::class)
 private fun Task.toEntity() = TaskEntity(
     id = id,
     title = title,
@@ -67,11 +63,10 @@ private fun Task.toEntity() = TaskEntity(
     category = category,
     dueDate = dueDate,
     isCompleted = isCompleted,
-    createdAt = Clock.System.now().toEpochMilliseconds(),
-    updatedAt = Clock.System.now().toEpochMilliseconds()
+    createdAt = System.now().toEpochMilliseconds(),
+    updatedAt = System.now().toEpochMilliseconds()
 )
 
-@OptIn(ExperimentalTime::class)
 private fun TaskEntity.toTask() = Task(
     id = id,
     title = title,

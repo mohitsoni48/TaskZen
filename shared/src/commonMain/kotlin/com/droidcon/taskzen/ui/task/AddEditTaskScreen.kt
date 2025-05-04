@@ -1,4 +1,4 @@
-package com.droidcon.taskzen.ui
+package com.droidcon.taskzen.ui.task
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -32,16 +32,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.droidcon.taskzen.BackHandler
 import com.droidcon.taskzen.generated.resources.Res
 import com.droidcon.taskzen.generated.resources.delete
-import com.droidcon.taskzen.generated.resources.send
+import com.droidcon.taskzen.generated.resources.save
 import com.droidcon.taskzen.generated.resources.timer
 import com.droidcon.taskzen.models.Task
 import com.droidcon.taskzen.models.TaskCategory
+import com.droidcon.taskzen.ui.shared.CategoryPicker
+import com.droidcon.taskzen.ui.shared.DateTimePicker
+import com.droidcon.taskzen.ui.theme.tertiary
 import com.droidcon.taskzen.viewmodels.TaskViewModel
 import kotlinx.coroutines.flow.map
 import org.jetbrains.compose.resources.painterResource
@@ -56,11 +60,9 @@ fun AddEditTaskScreen(
 
     val task: Task? by taskViewModel.tasksViewState.map { it.currentTask }.collectAsState(null)
 
-    LaunchedEffect(Unit) {
-        taskViewModel.getTask(taskId)
-    }
-
     DisposableEffect(Unit) {
+        taskViewModel.getTask(taskId)
+
         onDispose {
             taskViewModel.onDismiss()
         }
@@ -149,6 +151,7 @@ fun AddEditTaskContent(
                         color = White,
                         fontSize = 18.sp
                     ),
+                    cursorBrush = SolidColor(White)
                 )
 
                 if (task.title.isEmpty()) {
@@ -177,6 +180,7 @@ fun AddEditTaskContent(
                         color = White,
                         fontSize = 18.sp
                     ),
+                    cursorBrush = SolidColor(White)
                 )
 
                 if (task.description.isEmpty()) {
@@ -224,7 +228,7 @@ fun AddEditTaskContent(
                 Spacer(Modifier.width(16.dp))
 
                 Image(
-                    painter = painterResource(Res.drawable.send),
+                    painter = painterResource(Res.drawable.save),
                     contentDescription = "save",
                     modifier = Modifier.size(24.dp).clickable {
                         onSaveClick(task)

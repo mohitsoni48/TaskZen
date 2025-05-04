@@ -1,4 +1,4 @@
-package com.droidcon.taskzen.ui
+package com.droidcon.taskzen.ui.shared
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
