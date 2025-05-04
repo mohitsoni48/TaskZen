@@ -72,16 +72,15 @@ fun TaskElement(
                 .height(29.dp)
                 .align(Alignment.Bottom)
                 .background(task.category.color, shape = MaterialTheme.shapes.small)
-                .padding(vertical = 4.dp, horizontal = 8.dp),
+                .padding(horizontal = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(painter = painterResource(task.category.res), contentDescription = null)
-            Spacer(Modifier.width(5.dp))
             Text(
                 task.category.name,
                 fontSize = 12.sp,
                 color = task.category.color.getContrastingTextColor(),
-                modifier = Modifier.padding(start = 4.dp),
+                modifier = Modifier.padding(end = 8.dp),
             )
         }
     }
@@ -89,7 +88,7 @@ fun TaskElement(
 
 @Composable
 private fun DueDate(task: Task) {
-    var text by remember {
+    var text by remember(task) {
         mutableStateOf(
             when {
                 task.isCompleted || task.dueDate == null -> task.description

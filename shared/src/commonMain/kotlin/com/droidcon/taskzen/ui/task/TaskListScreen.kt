@@ -18,7 +18,7 @@ fun TaskListScreen(
         LazyColumn(
             modifier = Modifier.fillMaxWidth()
         ) {
-            items(tasks.size) { index ->
+            items(tasks.size, key = { tasks[it].id }) { index ->
                 TaskElement(
                     task = tasks[index],
                     onMarkAsComplete = {

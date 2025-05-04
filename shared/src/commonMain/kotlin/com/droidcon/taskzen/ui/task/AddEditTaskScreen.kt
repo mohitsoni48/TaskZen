@@ -23,8 +23,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,6 +34,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.droidcon.taskzen.BackHandler
 import com.droidcon.taskzen.generated.resources.Res
 import com.droidcon.taskzen.generated.resources.delete
@@ -47,7 +46,6 @@ import com.droidcon.taskzen.ui.shared.CategoryPicker
 import com.droidcon.taskzen.ui.shared.DateTimePicker
 import com.droidcon.taskzen.ui.theme.tertiary
 import com.droidcon.taskzen.viewmodels.TaskViewModel
-import kotlinx.coroutines.flow.map
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -58,7 +56,7 @@ fun AddEditTaskScreen(
 ) {
     val taskViewModel: TaskViewModel = koinViewModel()
 
-    val task: Task? by taskViewModel.tasksViewState.map { it.currentTask }.collectAsState(null)
+    val taskDetailUiState by taskViewModel.taskDetailUiState.collectAsStateWithLifecycle()
 
     DisposableEffect(Unit) {
         taskViewModel.getTask(taskId)
@@ -68,7 +66,7 @@ fun AddEditTaskScreen(
         }
     }
 
-    task?.let {
+    taskDetailUiState.currentTask?.let {
         AddEditTaskContent(
             it,
             updateTitle = { taskViewModel.updateTaskTitle(it) },
