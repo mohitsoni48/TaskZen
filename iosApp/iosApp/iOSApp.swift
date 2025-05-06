@@ -1,14 +1,14 @@
 import SwiftUI
-import shared
+import ComposeApp
 
 @main
 struct iOSApp: App {
     init() {
         DependenciesProviderHelper().doInitKoin()
     }
-	var body: some Scene {
-		WindowGroup {
-			ContentView()
-		}
-	}
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+    }
 }
