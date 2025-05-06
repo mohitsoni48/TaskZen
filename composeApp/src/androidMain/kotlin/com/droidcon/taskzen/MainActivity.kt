@@ -9,7 +9,6 @@ import com.droidcon.taskzen.models.Task
 import com.droidcon.taskzen.models.TaskCategory
 import com.droidcon.taskzen.ui.home.App
 import com.droidcon.taskzen.ui.shared.CategoryPicker
-import com.droidcon.taskzen.ui.task.AddEditTaskContent
 import com.droidcon.taskzen.ui.task.TaskElement
 
 class MainActivity : ComponentActivity() {
@@ -20,21 +19,6 @@ class MainActivity : ComponentActivity() {
             App()
         }
     }
-}
-
-@Preview
-@Composable
-private fun AddEditTaskContentPreview() {
-    AddEditTaskContent(
-        task = Task(1, "Task 1", "", TaskCategory.GROCERY, null, System.currentTimeMillis() ,false),
-        onBackClick = {},
-        onSaveClick = {},
-        updateTitle = {},
-        updateDescription = {},
-        updateCategory = {},
-        updateDueDate = {},
-        onDelete = {}
-    )
 }
 
 @Preview
