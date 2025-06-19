@@ -25,7 +25,7 @@ import com.droidcon.taskzen.ui.theme.secondary
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun CategoryPicker(onSelected: (TaskCategory) -> Unit, onDismiss: () -> Unit) {
+fun CategoryPicker(onDismiss: () -> Unit) {
     Box(modifier = Modifier
         .fillMaxSize()
         .clickable { onDismiss() }
@@ -44,7 +44,6 @@ fun CategoryPicker(onSelected: (TaskCategory) -> Unit, onDismiss: () -> Unit) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.padding(16.dp).clickable {
-                            onSelected(category)
                         }
                     ) {
                         Image(painter = painterResource(category.res), contentDescription = category.name, modifier = Modifier.size(64.dp))

@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 fun CategoryPickerPreview() {
-    CategoryPicker(onSelected = {}) {}
+    CategoryPicker() {}
 }
 
 @Preview
