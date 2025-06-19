@@ -22,10 +22,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.droidcon.taskzen.models.TaskCategory
 import com.droidcon.taskzen.ui.theme.secondary
+import com.droidcon.taskzen.viewmodels.TaskViewModel
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun CategoryPicker(onDismiss: () -> Unit) {
+fun CategoryPicker(onSelected: (TaskCategory) -> Unit, onDismiss: () -> Unit) {
     Box(modifier = Modifier
         .fillMaxSize()
         .clickable { onDismiss() }
@@ -44,7 +46,7 @@ fun CategoryPicker(onDismiss: () -> Unit) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.padding(16.dp).clickable {
-
+                            onSelected(category)
                         }
                     ) {
                         Image(painter = painterResource(category.res), contentDescription = category.name, modifier = Modifier.size(64.dp))

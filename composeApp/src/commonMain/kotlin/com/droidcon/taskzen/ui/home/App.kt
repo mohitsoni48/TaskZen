@@ -16,7 +16,8 @@ import androidx.navigation.toRoute
 import com.droidcon.taskzen.models.AddTask
 import com.droidcon.taskzen.models.EditTask
 import com.droidcon.taskzen.models.Home
-import com.droidcon.taskzen.ui.task.AddEditTaskScreen
+import com.droidcon.taskzen.ui.task.AddTaskScreen
+import com.droidcon.taskzen.ui.task.EditTaskScreen
 import com.droidcon.taskzen.ui.theme.MyApplicationTheme
 
 @Composable
@@ -49,12 +50,12 @@ fun App(modifier: Modifier = Modifier) {
                     }
 
                     composable<AddTask>{
-                        AddEditTaskScreen(null, onBackClick = { navController.popBackStack() })
+                        AddTaskScreen(onBackClick = { navController.popBackStack() })
                     }
 
                     composable<EditTask> {
                         val taskId = it.toRoute<EditTask>().taskId
-                        AddEditTaskScreen(taskId, onBackClick = { navController.popBackStack() })
+                        EditTaskScreen(taskId, onBackClick = { navController.popBackStack() })
                     }
                 }
             }
